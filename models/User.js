@@ -18,11 +18,11 @@ const userSchema = new mongoose.Schema({
     type: String
   },
   balance: {
-    type: Int32,
+    type: Number,
     default: 1000
   },
   score: {
-    type: Int32,
+    type: Number,
     default: 0
   },
   createdDate: {

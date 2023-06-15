@@ -15,11 +15,6 @@ const createRoom = async (req, res, next) => {
 
   await room.save();
 
-  const payload = {
-    success: true,
-    room
-  };
-
   return res.status(200).json({
     success: true,
     room
