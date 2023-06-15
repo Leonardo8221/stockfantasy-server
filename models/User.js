@@ -17,10 +17,18 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String
   },
-  date: {
+  balance: {
+    type: Int32,
+    default: 1000
+  },
+  score: {
+    type: Int32,
+    default: 0
+  },
+  createdDate: {
     type: Date,
     default: Date.now
-  }
+  },
 });
 
 userSchema.pre("save", async function (next) {
