@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 const Game = require('../models/Game');
 const User = require('../models/User');
 const Room = require('../models/Room');
@@ -92,8 +94,19 @@ const deleteGame = async (req, res, next) => {
     next(err);
   }
 };
+
+const getAllStocks = async (req, res, next) => {
+  const apiKey = '16eec80c5f5ee710a5a15f0e381f88a6';
+  url = ' http://finviz.com/export.ashx?v=152&f=idx_sp500&ft=1&ta=1&p=d&r=1&c=1'
+
+  const response = await fetch(url);
+  const data = await response.json();
+  res.json(data);
+};
+
 exports.createGame = createGame;
 exports.updateGame = updateGame;
 exports.deleteGame = deleteGame;
 exports.getGame = getGame;
 exports.getAllGames = getAllGames;
+exports.getAllStocks = getAllStocks;

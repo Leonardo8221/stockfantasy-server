@@ -16,7 +16,7 @@ const gameSchema = new mongoose.Schema({
   },
   stocks: [
     {
-      type: String
+      type: Object
     }
   ]
 });
