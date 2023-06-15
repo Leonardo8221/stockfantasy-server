@@ -6,13 +6,14 @@ const normalize = require('normalize-url');
 const User = require('../models/User');
 
 const fetchAllUsers = async (req, res, next) => {
-  const users = await User.find();
+  const users = await User.find({_id: {$ne: req.user.id}});
 
-  console.log(users)
-  
+  console.log(users);
+
   res.status(200).json({
     success: true,
-    users
+    users,
+    numOfUsers: users.length
   });
 };
 
@@ -94,9 +95,7 @@ const updatePassword = async (req, res) => {
         await user.save();
 
         const payload = {
-          user: {
-            id: user.id
-          }
+          user
         };
         res.status(200).json({
           success: [{ msg: 'Password Updated successfully', payload: payload }]
