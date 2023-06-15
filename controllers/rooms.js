@@ -2,13 +2,20 @@ const Room = require('../models/Room');
 const User = require('../models/User');
 
 const getAllRooms = async (req, res, next) => {
-  const rooms = await Room.findAll();
+  try {
+    const rooms = await Room.find();
 
-  res.status(200).json({
-    success: true,
-    rooms,
-    numOfRooms: rooms.length
-  });
+    res.status(200).json({
+      success: true,
+      rooms,
+      numOfRooms: rooms.length
+    });
+  } catch (error) {
+    res.status(200).json({
+      success: false,
+      error
+    });
+  }
 };
 
 const getRoom = async (req, res, next) => {
@@ -58,7 +65,7 @@ const updateRoom = async (req, res, next) => {
 const deleteRoom = async (req, res, next) => {
   try {
     const room = await Room.findByIdAndDelete(req.params.id);
-    res.status(200).json(room);
+    res.status(200).json({ success: true, room });
   } catch (err) {
     next(err);
   }
