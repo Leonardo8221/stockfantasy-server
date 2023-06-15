@@ -5,7 +5,7 @@ const normalize = require('normalize-url');
 
 const auth = require('../../middleware/auth');
 
-const roomController = require('../../controlles/rooms');
+const roomController = require('../../controllers/rooms');
 
 // @route           POST api/rooms
 // @description     Create Game Room
