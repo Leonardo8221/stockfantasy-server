@@ -1,5 +1,4 @@
 const gravatar = require('gravatar');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const normalize = require('normalize-url');
@@ -7,9 +6,15 @@ const normalize = require('normalize-url');
 const User = require('../models/User');
 
 const fetchAllUsers = async (req, res, next) => {
-  
-};
+  const users = await User.find();
 
+  console.log(users)
+  
+  res.status(200).json({
+    success: true,
+    users
+  });
+};
 
 const registerUser = async (req, res) => {
   const errors = validationResult(req);
@@ -104,5 +109,6 @@ const updatePassword = async (req, res) => {
   }
 };
 
+exports.fetchAllUsers = fetchAllUsers;
 exports.registerUser = registerUser;
 exports.updatePassword = updatePassword;
