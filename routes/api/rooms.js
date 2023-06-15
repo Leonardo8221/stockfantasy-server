@@ -11,6 +11,6 @@ const roomController = require('../../controllers/rooms');
 // @description     Create Game Room
 // @access          Public
 router.post('/', auth, roomController.createRoom);
-
+router.put('/:id', auth, roomController.updateRoom);
 
 module.exports = router;
