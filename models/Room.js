@@ -5,7 +5,7 @@ const roomSchema = new mongoose.Schema({
     required: true
   },
 
-  creator: {
+  creater: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
@@ -28,8 +28,8 @@ const roomSchema = new mongoose.Schema({
   },
   roomType: {
     type: String,
-    enum: ['public', 'private'],
-    default: 'public'
+    enum: ['random', 'private'],
+    default: 'random'
   }
 });
 
