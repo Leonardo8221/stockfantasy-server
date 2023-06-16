@@ -49,6 +49,7 @@ const createRoom = async (req, res, next) => {
   const { name, type, players, roomType } = req.body;
 
   const creater = req.user.id;
+  players.push(creater);
 
   let room = new Room({
     name,
