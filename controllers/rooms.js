@@ -24,7 +24,7 @@ const getRoom = async (req, res, next) => {
 };
 
 const createRoom = async (req, res, next) => {
-  const { name, type, players } = req.body;
+  const { name, type, players, roomType } = req.body;
 
   const creater = req.user.id;
 
@@ -32,7 +32,8 @@ const createRoom = async (req, res, next) => {
     name,
     type,
     creater,
-    players
+    players,
+    roomType,
   });
 
   await room.save();
