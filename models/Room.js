@@ -21,6 +21,10 @@ const roomSchema = new mongoose.Schema({
   startedDate: {
     type: Date
   },
+  
+  endDate: {
+    type: Date
+  },
 
   createdDate: {
     type: Date,
