@@ -17,6 +17,6 @@ router.put('/update-password', auth, userController.updatePassword);
 // @route       GET api/users
 // @desc        Fetch users
 // @access      Public
-router.get('/', auth, userController.fetchAllUsers);
+router.get('/all', auth, userController.fetchAllUsers);
 
 module.exports = router;
