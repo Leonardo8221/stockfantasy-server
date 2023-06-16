@@ -6,7 +6,6 @@ const getAllRooms = async (req, res, next) => {
     const rooms = await Room.find();
 
     res.status(200).json({
-      success: true,
       rooms,
       numOfRooms: rooms.length
     });
@@ -21,10 +20,7 @@ const getAllRooms = async (req, res, next) => {
 const getRoom = async (req, res, next) => {
   const room = await Room.findById(req.params.id);
 
-  res.status(200).json({
-    success: true,
-    room
-  });
+  res.status(200).json(room);
 };
 
 const createRoom = async (req, res, next) => {
@@ -41,10 +37,7 @@ const createRoom = async (req, res, next) => {
 
   await room.save();
 
-  return res.status(200).json({
-    success: true,
-    room
-  });
+  res.status(200).json(room);
 };
 
 const updateRoom = async (req, res, next) => {
@@ -56,7 +49,7 @@ const updateRoom = async (req, res, next) => {
     if (!room) {
       return res.status(404).json('error');
     }
-    res.status(200).json({ success: true, room });
+    res.status(200).json(room);
   } catch (error) {
     res.status(400).json({ error });
   }
@@ -65,7 +58,7 @@ const updateRoom = async (req, res, next) => {
 const deleteRoom = async (req, res, next) => {
   try {
     const room = await Room.findByIdAndDelete(req.params.id);
-    res.status(200).json({ success: true, room });
+    res.status(200).json(room);
   } catch (err) {
     next(err);
   }
