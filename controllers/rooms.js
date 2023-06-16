@@ -24,25 +24,9 @@ const getRoom = async (req, res, next) => {
 };
 
 const getRooms = async (req, res, next) => {
-  const { started } = req.body;
+  const rooms = await Room.find({ startedDate: { $ne: null } });
+  res.status(200).json(rooms);
 
-  if (!started) {
-    await Room.find({ statedDate: null }, (err, rooms) => {
-      if (err) {
-        res.status(500).json(err);
-      } else {
-        res.status(200).json(rooms);
-      }
-    });
-  } else {
-    await Room.find({ statedDate: { $ne: null } }, (err, rooms) => {
-      if (err) {
-        res.status(500).json(err);
-      } else {
-        res.status(200).json(rooms);
-      }
-    });
-  }
 };
 
 const createRoom = async (req, res, next) => {
@@ -56,7 +40,8 @@ const createRoom = async (req, res, next) => {
     type,
     creater,
     players,
-    roomType
+    roomType,
+    startedDate: new Date()
   });
 
   await room.save();
