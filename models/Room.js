@@ -18,10 +18,15 @@ const roomSchema = new mongoose.Schema({
     }
   ],
 
+  duration: {
+    type: Number,
+    default: 7
+  },
+
   startedDate: {
     type: Date
   },
-  
+
   endDate: {
     type: Date
   },

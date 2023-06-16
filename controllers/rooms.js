@@ -41,7 +41,8 @@ const createRoom = async (req, res, next) => {
     creater,
     players,
     roomType,
-    startedDate: new Date()
+    startedDate: new Date(),
+    endDate: new Date(),
   });
 
   await room.save();
