@@ -30,6 +30,11 @@ router.delete('/:id', auth, roomController.deleteRoom);
 // @route           GET api/rooms
 // @description     Get ALL Rooms
 // @access          Private
-router.get('/', auth, roomController.getAllRooms);
+router.get('/all', auth, roomController.getAllRooms);
+
+// @route           GET api/rooms
+// @description     Get ALL Rooms
+// @access          Private
+router.get('/', auth, roomController.getRooms);
 
 module.exports = router;

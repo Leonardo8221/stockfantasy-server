@@ -23,6 +23,28 @@ const getRoom = async (req, res, next) => {
   res.status(200).json(room);
 };
 
+const getRooms = async (req, res, next) => {
+  const { started } = req.body;
+
+  if (!started) {
+    await Room.find({ statedDate: null }, (err, rooms) => {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        res.status(200).json(rooms);
+      }
+    });
+  } else {
+    await Room.find({ statedDate: { $ne: null } }, (err, rooms) => {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        res.status(200).json(rooms);
+      }
+    });
+  }
+};
+
 const createRoom = async (req, res, next) => {
   const { name, type, players, roomType } = req.body;
 
@@ -33,7 +55,7 @@ const createRoom = async (req, res, next) => {
     type,
     creater,
     players,
-    roomType,
+    roomType
   });
 
   await room.save();
@@ -69,3 +91,4 @@ exports.updateRoom = updateRoom;
 exports.deleteRoom = deleteRoom;
 exports.getRoom = getRoom;
 exports.getAllRooms = getAllRooms;
+exports.getRooms = getRooms;
