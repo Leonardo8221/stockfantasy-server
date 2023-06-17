@@ -19,14 +19,18 @@ const getAllRooms = async (req, res, next) => {
 
 const getRoom = async (req, res, next) => {
   const room = await Room.findById(req.params.id);
-
   res.status(200).json(room);
 };
 
 const getRooms = async (req, res, next) => {
-  const rooms = await Room.find({ startedDate: { $ne: null } });
+  const { isStarted } = req.query; // retrieve the "isStarted" value from the URL
+  console.log(isStarted);
+  const query = isStarted === 'true'
+    ? { startedDate: { $ne: null } }
+    : { startedDate: null };
+  const rooms = await Room.find(query); // use the "isStarted" value to filter the rooms
+  console.log(rooms);
   res.status(200).json(rooms);
-
 };
 
 const createRoom = async (req, res, next) => {
@@ -40,9 +44,7 @@ const createRoom = async (req, res, next) => {
     type,
     creater,
     players,
-    roomType,
-    startedDate: new Date(),
-    endDate: new Date(),
+    roomType
   });
 
   await room.save();
