@@ -29,7 +29,7 @@ const getRooms = async (req, res, next) => {
     ? { startedDate: { $ne: null } }
     : { startedDate: null };
   const rooms = await Room.find(query); // use the "isStarted" value to filter the rooms
-  console.log(rooms);
+
   res.status(200).json(rooms);
 };
 

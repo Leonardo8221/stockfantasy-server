@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String
   },
-  balance: {
+  budget: {
     type: Number,
     default: 1000
   },
