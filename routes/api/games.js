@@ -17,10 +17,7 @@ router.post('/', auth, gameController.createGame);
 // @access          Private
 router.put('/updateGame/:id', auth, gameController.updateGame);
 
-// @route           GET api/games/:id
-// @description     Get Game By Id
-// @access          Private
-router.get('/getGame/:id', auth, gameController.getGame);
+
 
 // @route           DELETE api/games/:id
 // @description     Delete Game by Id
@@ -31,6 +28,11 @@ router.delete('/deleteGame/:id', auth, gameController.deleteGame);
 // @description     Get ALL Games
 // @access          Private
 router.get('/getAllGames/', auth, gameController.getAllGames);
+
+// @route           GET api/games/getGames
+// @description     Get Game By Id
+// @access          Private
+router.get('/', auth, gameController.getGames);
 
 // @route           GET api/games/stocks
 // @description     Get all Stocks

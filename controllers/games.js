@@ -31,6 +31,13 @@ const getGame = async (req, res, next) => {
   });
 };
 
+const getGames = async (req, res, next) => {
+  const { roomID } = req.query; // retrieve the "isStarted" value from the URL
+  const rooms = await Game.find({roomID:roomID}); // use the "isStarted" value to filter the rooms
+  
+  res.status(200).json(rooms);
+};
+
 const createGame = async (req, res, next) => {
   const { roomID, selectedStocks } = req.body;
 
@@ -39,37 +46,13 @@ const createGame = async (req, res, next) => {
   let game = new Game({
     playerID,
     roomID,
-    isReady:true,
-    stocks:selectedStocks
+    isReady: true,
+    stocks: selectedStocks
   });
 
   await game.save();
 
-  /**
-   * Update the room with new player
-   */
-  // Find the room you want to update
-  let room = await Room.findById(roomID);
-  if (room) {
-    // Add the new player to the players array
-    room.players.push(playerID);
-
-    // Save the updated room
-    room.save((err, updatedRoom) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log(
-        `Room ${updatedRoom.name} updated with new player ${playerID}`
-      );
-    });
-  }
-
-  return res.status(200).json({
-    success: true,
-    game
-  });
+  return res.status(200).json(game);
 };
 
 const updateGame = async (req, res, next) => {
@@ -97,21 +80,23 @@ const deleteGame = async (req, res, next) => {
 };
 
 const getAllStocks = async (req, res, next) => {
-
-  sp500.getTickers().then((tickers) => {
-    console.log(tickers);
-  }).catch((err) => {
-    console.error(err);
-  });
+  sp500
+    .getTickers()
+    .then((tickers) => {
+      console.log(tickers);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 
   // const stocks = await sp500.getTickers()
   // res.status(200).json({stocks})
-
 };
 
 exports.createGame = createGame;
 exports.updateGame = updateGame;
 exports.deleteGame = deleteGame;
 exports.getGame = getGame;
+exports.getGames = getGames;
 exports.getAllGames = getAllGames;
 exports.getAllStocks = getAllStocks;
