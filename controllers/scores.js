@@ -16,9 +16,7 @@ const getAllScores = async (req, res, next) => {
 
 const getScores = async (req, res, next) => {
   const { roomID } = req.query; // retrieve the "isStarted" value from the URL
-
   const scores = await Score.find({ roomID: roomID }); // use the "isStarted" value to filter the scores
-
   res.status(200).json(scores);
 };
 

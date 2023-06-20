@@ -1,6 +1,6 @@
-require("dotenv").config();
+require('dotenv').config();
 
-const cors = require("cors");
+const cors = require('cors');
 const express = require('express');
 const connectDB = require('./config/db');
 const path = require('path');
@@ -19,6 +19,7 @@ app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/rooms', require('./routes/api/rooms'));
 app.use('/api/games', require('./routes/api/games'));
+app.use('/api/scores', require('./routes/api/scores'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
