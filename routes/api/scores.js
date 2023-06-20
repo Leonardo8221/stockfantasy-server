@@ -18,7 +18,7 @@ router.post('/', auth, scoreController.createScore);
 router.put('/:id', auth, scoreController.updateScore);
 
 
-// @route           GET api/scores/
+// @route           GET api/scores
 // @description     Get Score By Id
 // @access          Private
 router.get('/', auth, scoreController.getScores);

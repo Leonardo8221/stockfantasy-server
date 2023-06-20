@@ -33,8 +33,8 @@ const getGame = async (req, res, next) => {
 
 const getGames = async (req, res, next) => {
   const { roomID } = req.query; // retrieve the "isStarted" value from the URL
-  const rooms = await Game.find({roomID:roomID}); // use the "isStarted" value to filter the rooms
-  
+  const rooms = await Game.find({ roomID: roomID }); // use the "isStarted" value to filter the rooms
+
   res.status(200).json(rooms);
 };
 
