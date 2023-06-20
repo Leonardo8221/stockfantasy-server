@@ -17,6 +17,16 @@ router.post('/', auth, roomController.createRoom);
 // @access          Private
 router.put('/:id', auth, roomController.updateRoom);
 
+// @route           PUT api/rooms/join-game/:id
+// @description     Update Room
+// @access          Private
+router.put('/join-game/:id', auth, roomController.joinGame);
+
+// @route           PUT api/rooms/exit-game/:id
+// @description     Update Room
+// @access          Private
+router.put('/exit-game/:id', auth, roomController.exitGame);
+
 // @route           GET api/rooms/:id
 // @description     Get Room By Id
 // @access          Private

@@ -24,10 +24,10 @@ const getRoom = async (req, res, next) => {
 
 const getRooms = async (req, res, next) => {
   const { isStarted } = req.query; // retrieve the "isStarted" value from the URL
-  console.log(isStarted);
-  const query = isStarted === 'true'
-    ? { startedDate: { $ne: null } }
-    : { startedDate: null };
+  const query =
+    isStarted === 'true'
+      ? { startedDate: { $ne: null } }
+      : { startedDate: null };
   const rooms = await Room.find(query); // use the "isStarted" value to filter the rooms
 
   res.status(200).json(rooms);
@@ -67,6 +67,49 @@ const updateRoom = async (req, res, next) => {
   }
 };
 
+const joinGame = async (req, res, next) => {
+  try {
+    const room = await Room.findById(req.params.id);
+    if (room.players.indexOf(req.body.userID) !== -1) {
+      // If the new item already exists in the array, replace it
+      room.players[room.players.indexOf(req.body.userID)] = req.body.userID;
+    } else {
+      // If the new item doesn't exist in the array, add it to the end
+      room.players.push(req.body.userID);
+    }
+    // room.players.push(req.body.userID);
+    room.save();
+    if (!room) {
+      return res.status(404).json('error');
+    }
+    res.status(200).json(room);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
+const exitGame = async (req, res, next) => {
+  try {
+    const room = await Room.findById(req.params.id);
+    if (room.roomType !== 'private') {
+      // Find the index of the element to remove
+      let index = room.players.indexOf(req.body.userID);
+
+      // Remove the element from the array
+      if (index > -1) {
+        room.players.splice(index, 1);
+      }
+    }
+    room.save();
+    if (!room) {
+      return res.status(404).json('error');
+    }
+    res.status(200).json(room);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
 const deleteRoom = async (req, res, next) => {
   try {
     const room = await Room.findByIdAndDelete(req.params.id);
@@ -81,3 +124,5 @@ exports.deleteRoom = deleteRoom;
 exports.getRoom = getRoom;
 exports.getAllRooms = getAllRooms;
 exports.getRooms = getRooms;
+exports.joinGame = joinGame;
+exports.exitGame = exitGame;

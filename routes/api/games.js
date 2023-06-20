@@ -37,4 +37,5 @@ router.get('/getAllGames/', auth, gameController.getAllGames);
 // @access          Private
 router.get('/stocks', auth, gameController.getAllStocks);
 
+
 module.exports = router;

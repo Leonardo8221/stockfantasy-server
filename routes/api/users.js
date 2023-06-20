@@ -14,6 +14,11 @@ router.post('/register', userController.registerUser);
 // @access          Private
 router.put('/update-password', auth, userController.updatePassword);
 
+// @route           PUT api/users/:id
+// @description     Update password
+// @access          Private
+router.put('/:id', auth, userController.updateUser);
+
 // @route       GET api/users
 // @desc        Fetch users
 // @access      Public

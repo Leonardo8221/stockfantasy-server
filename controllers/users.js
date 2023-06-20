@@ -83,7 +83,6 @@ const updatePassword = async (req, res) => {
         res
           .status(400)
           .json({ errors: [{ message: 'Old password is incorrect' }] });
-        // return next(new ErrorHandler("Old password is incorrect", 400));
       } else {
         user.password = newPassword;
         await user.save();
@@ -102,6 +101,22 @@ const updatePassword = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+    if (!user) {
+      return res.status(404).json('error');
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
 exports.fetchAllUsers = fetchAllUsers;
 exports.registerUser = registerUser;
 exports.updatePassword = updatePassword;
+exports.updateUser = updateUser;

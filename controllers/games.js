@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const sp500 = require('sp500');
 
 const Game = require('../models/Game');
 const User = require('../models/User');
@@ -31,15 +32,15 @@ const getGame = async (req, res, next) => {
 };
 
 const createGame = async (req, res, next) => {
-  const { roomID, isReady, stocks } = req.body;
+  const { roomID, selectedStocks } = req.body;
 
   const playerID = req.user.id;
 
   let game = new Game({
     playerID,
     roomID,
-    isReady,
-    stocks
+    isReady:true,
+    stocks:selectedStocks
   });
 
   await game.save();
@@ -96,12 +97,16 @@ const deleteGame = async (req, res, next) => {
 };
 
 const getAllStocks = async (req, res, next) => {
-  const apiKey = '16eec80c5f5ee710a5a15f0e381f88a6';
-  url = ' http://finviz.com/export.ashx?v=152&f=idx_sp500&ft=1&ta=1&p=d&r=1&c=1'
 
-  const response = await fetch(url);
-  const data = await response.json();
-  res.json(data);
+  sp500.getTickers().then((tickers) => {
+    console.log(tickers);
+  }).catch((err) => {
+    console.error(err);
+  });
+
+  // const stocks = await sp500.getTickers()
+  // res.status(200).json({stocks})
+
 };
 
 exports.createGame = createGame;
