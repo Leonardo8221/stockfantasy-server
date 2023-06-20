@@ -6,7 +6,7 @@ const normalize = require('normalize-url');
 const User = require('../models/User');
 
 const fetchAllUsers = async (req, res, next) => {
-  const users = await User.find({ _id: { $ne: req.user.id } });
+  const users = await User.find();
 
   res.status(200).json(users);
 };

@@ -21,10 +21,6 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 1000
   },
-  score: {
-    type: Number,
-    default: 0
-  },
   createdDate: {
     type: Date,
     default: Date.now
