@@ -4,8 +4,15 @@ const cors = require('cors');
 const express = require('express');
 const connectDB = require('./config/db');
 const path = require('path');
-
+const http = require('http');
+const socket = require('socket.io');
 const app = express();
+
+const roomController = require('./controllers/rooms');
+const gameController = require('./controllers/games');
+
+// const server = http.Server(app);
+// const io = socket(server);
 app.use(cors());
 
 // Connect Database
