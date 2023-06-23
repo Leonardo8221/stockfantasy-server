@@ -22,6 +22,7 @@
     "express": "^4.17.1",
     "express-busboy": "^10.1.0",
     "express-validator": "^6.8.1",
+    "financialmodelingprep": "^1.1.0",
     "gravatar": "^1.8.1",
     "http": "0.0.1-security",
     "https": "^1.0.0",

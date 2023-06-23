@@ -1,8 +1,10 @@
-const axios = require('axios');
+const fmp = require('financialmodelingprep')(
+  'f10a1d8a11d2cc5b706ea21564646b12'
+);
+
 const Game = require('../models/Game');
 const User = require('../models/User');
 const Room = require('../models/Room');
-
 
 const getAllGames = async (req, res, next) => {
   try {
@@ -79,14 +81,10 @@ const deleteGame = async (req, res, next) => {
 };
 
 const getAllStocks = async (req, res, next) => {
-  const apiKey = 'f10a1d8a11d2cc5b706ea21564646b12';
-
-  axios
-      .get(`https://financialmodelingprep.com/api/v3/historical-price-full/index/%5EGSPC?apikey=${apiKey}`)
-      .then(response => {
-        res.status(200).json(response.data )
-      })
-      .catch((error) => console.log(error));
+  // API route: /quote/AAPL
+  fmp.market.index
+    .list()
+    .then((response) => res.json(response));
 };
 
 exports.createGame = createGame;

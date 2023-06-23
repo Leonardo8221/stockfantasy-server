@@ -10,15 +10,23 @@ const app = express();
 
 const roomController = require('./controllers/rooms');
 const gameController = require('./controllers/games');
+const jwt = require('jsonwebtoken');
 
-// const server = http.Server(app);
-// const io = socket(server);
-app.use(cors());
+const users = new Map();
+const server = http.Server(app);
+const io = socket(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+});
 
 // Connect Database
 connectDB();
 
 // Init Middleware
+app.use(cors());
 app.use(express.json());
 
 // Define Routes
@@ -38,6 +46,46 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+
+//authentication
+
+async function authHandler(socket, next) {
+  const token = socket.handshake.auth.token;
+  if (token) {
+    try {
+      jwt.verify(token, process.env.JWT_KEY, (error, decoded) => {
+        if (error) {
+          return res.status(401).json({ msg: 'Token is not valid' });
+        } else {
+          const user = decoded.user;
+          users.set(socket, {...user});
+        }
+        
+    });
+
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  next();
+}
+
+io.use(authHandler);
+
+io.on('connection', (socket) => {
+  console.log(`Socket ${socket.id} connected`);
+  socket.on('addRoom', (Room) => {
+    Room = {...Room, creater: users.get(socket).id}
+    roomController.createRoomBySocket(io, Room);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`Socket ${socket.id} disconnected`);
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server started on port ${PORT}`));

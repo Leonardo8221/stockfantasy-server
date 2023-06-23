@@ -51,6 +51,23 @@ const createRoom = async (req, res, next) => {
 
   res.status(200).json(room);
 };
+const createRoomBySocket = async (io, R) => {
+  const { name, type, players, roomType, creater} = R;
+
+  // const creater = req.user.id;
+  players.push(creater);
+
+  let room = new Room({
+    name,
+    type,
+    creater,
+    players,
+    roomType
+  });
+
+  await room.save();
+  io.emit('RoomAdded', room);
+};
 
 const updateRoom = async (req, res, next) => {
   try {
@@ -91,7 +108,7 @@ const joinGame = async (req, res, next) => {
 const exitGame = async (req, res, next) => {
   try {
     const room = await Room.findById(req.params.id);
-    if (room.roomType !== 'private') {
+    if (room.roomType !== 'private' && req.body.userID !== req.user.id) {
       // Find the index of the element to remove
       let index = room.players.indexOf(req.body.userID);
 
@@ -126,3 +143,5 @@ exports.getAllRooms = getAllRooms;
 exports.getRooms = getRooms;
 exports.joinGame = joinGame;
 exports.exitGame = exitGame;
+
+exports.createRoomBySocket = createRoomBySocket;
