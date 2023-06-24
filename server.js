@@ -56,6 +56,9 @@ io.on('connection', (socket) => {
   socket.on('joinGameRequest', (Room) => {
     roomController.joinGameBySocket(io, Room);
   });
+  socket.on('exitGameRequst', (Room) => {
+    roomController.exitGameBySocket(io, Room);
+  });
 
   socket.on('disconnect', () => {
     console.log(`Socket ${socket.id} disconnected`);

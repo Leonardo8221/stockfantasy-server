@@ -123,7 +123,7 @@ const joinGameBySocket = async (io, R) => {
     }
     io.emit('UserJoined', room);
   } catch (error) {
-    console.log('Error: ', error);
+    console.log('Server Error: ', error);
   }
 };
 
@@ -149,6 +149,28 @@ const exitGame = async (req, res, next) => {
     res.status(400).json({ error });
   }
 };
+const exitGameBySocket = async (io, R) => {
+  try {
+    const room = await Room.findById(req.params.id);
+
+    if (room.roomType !== 'private' && req.user.id != room.creater) {
+      // Find the index of the element to remove
+      let index = room.players.indexOf(req.user.id);
+
+      // Remove the element from the array
+      if (index > -1) {
+        room.players.splice(index, 1);
+      }
+      room.save();
+    } 
+    if (!room) {
+      console.log('Server Error: ', error);
+    }
+    io.emit('UserExited', room);
+  } catch (error) {
+    console.log('Server Error: ', error);
+  }
+};
 
 const deleteRoom = async (req, res, next) => {
   try {
@@ -169,3 +191,4 @@ exports.exitGame = exitGame;
 
 exports.createRoomBySocket = createRoomBySocket;
 exports.joinGameBySocket = joinGameBySocket;
+exports.exitGameBySocket = exitGameBySocket;
