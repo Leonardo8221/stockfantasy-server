@@ -46,39 +46,15 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-
-//authentication
-
-async function authHandler(socket, next) {
-  const token = socket.handshake.auth.token;
-  if (token) {
-    try {
-      jwt.verify(token, process.env.JWT_KEY, (error, decoded) => {
-        if (error) {
-          return res.status(401).json({ msg: 'Token is not valid' });
-        } else {
-          const user = decoded.user;
-          users.set(socket, {...user});
-        }
-        
-    });
-
-      
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  next();
-}
-
-io.use(authHandler);
-
 io.on('connection', (socket) => {
   console.log(`Socket ${socket.id} connected`);
+
   socket.on('addRoom', (Room) => {
-    Room = {...Room, creater: users.get(socket).id}
     roomController.createRoomBySocket(io, Room);
+  });
+
+  socket.on('joinGameRequest', (Room) => {
+    roomController.joinGameBySocket(io, Room);
   });
 
   socket.on('disconnect', () => {
@@ -86,6 +62,6 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
