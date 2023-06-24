@@ -140,7 +140,7 @@ const exitGame = async (req, res, next) => {
         room.players.splice(index, 1);
       }
       room.save();
-    } 
+    }
     if (!room) {
       return res.status(404).json('error');
     }
@@ -150,7 +150,7 @@ const exitGame = async (req, res, next) => {
   }
 };
 const exitGameBySocket = async (io, R) => {
-  const {userID, roomID}
+  const { userID, roomID } = R;
   try {
     const room = await Room.findById(roomID);
 
@@ -163,7 +163,7 @@ const exitGameBySocket = async (io, R) => {
         room.players.splice(index, 1);
       }
       room.save();
-    } 
+    }
     if (!room) {
       return console.log('Error', error);
     }
