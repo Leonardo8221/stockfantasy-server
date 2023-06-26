@@ -10,9 +10,6 @@ const app = express();
 
 const roomController = require('./controllers/rooms');
 const gameController = require('./controllers/games');
-const jwt = require('jsonwebtoken');
-
-const users = new Map();
 const server = http.Server(app);
 const io = socket(server, {
   cors: {
@@ -56,9 +53,15 @@ io.on('connection', (socket) => {
   socket.on('joinGameRequest', (Room) => {
     roomController.joinGameBySocket(io, Room);
   });
-  socket.on('exitGameRequst', (Room) => {
+  socket.on('exitGameRequest', (Room) => {
     roomController.exitGameBySocket(io, Room);
   });
+  
+  socket.on('gameReadyRequest', (Game) => {
+    console.log('gameReady');
+    gameController.createGameBySocket(io, Game);
+  });
+  
 
   socket.on('disconnect', () => {
     console.log(`Socket ${socket.id} disconnected`);

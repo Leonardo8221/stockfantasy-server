@@ -21,22 +21,18 @@ const getScores = async (req, res, next) => {
 };
 
 const createScore = async (req, res, next) => {
-  const { name, type, players, roomType } = req.body;
+  const { playerID, roomID, score } = req.body;
 
-  const creater = req.user.id;
-  players.push(creater);
-
-  let room = new Score({
-    name,
-    type,
-    creater,
-    players,
-    roomType
+  let score = new Score({
+    
+    playerID,
+    roomID,
+    score
   });
 
-  await room.save();
+  await score.save();
 
-  res.status(200).json(room);
+  res.status(200).json(score);
 };
 
 const updateScore = async (req, res, next) => {

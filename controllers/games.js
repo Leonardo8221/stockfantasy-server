@@ -55,6 +55,19 @@ const createGame = async (req, res, next) => {
 
   return res.status(200).json(game);
 };
+const createGameBySocket = async (io, G) => {
+  const { roomID, selectedStocks, playerID} = G;
+
+  let game = new Game({
+    playerID,
+    roomID,
+    isReady: true,
+    stocks: selectedStocks
+  });
+
+  await game.save();
+  io.emit('GameReady', game);
+};
 
 const updateGame = async (req, res, next) => {
   try {
@@ -94,3 +107,5 @@ exports.getGame = getGame;
 exports.getGames = getGames;
 exports.getAllGames = getAllGames;
 exports.getAllStocks = getAllStocks;
+
+exports.createGameBySocket = createGameBySocket;
