@@ -10,7 +10,7 @@ const scoreSchema = new mongoose.Schema({
     ref: 'Room',
     required: true
   },
-  score: {
+  point: {
     type: Number,
     default: 0
   }

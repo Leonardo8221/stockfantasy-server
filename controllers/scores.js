@@ -15,25 +15,37 @@ const getAllScores = async (req, res, next) => {
 };
 
 const getScores = async (req, res, next) => {
-  const { roomID } = req.query; // retrieve the "isStarted" value from the URL
-  const scores = await Score.find({ roomID: roomID }); // use the "isStarted" value to filter the scores
+  const { roomID } = req.query; // retrieve the "roomID" value from the URL
+  const scores = await Score.find({ roomID: roomID }); // use the "roomID" value to filter the scores
   res.status(200).json(scores);
 };
 
-const createScore = async (req, res, next) => {
-  const { playerID, roomID, score } = req.body;
+const giveScore = async (req, res, next) => {
+  const { playerID, roomID, point } = req.body;
 
-  let score = new Score({
-    
-    playerID,
-    roomID,
-    score
-  });
+  // Check if a score entry with the same roomID and playerID already exists
+  const existingScore = await Score.findOne({ playerID, roomID });
 
-  await score.save();
+  if (existingScore) {
+    // If an existing score is found, update the point value
+    existingScore.point = point;
+    await existingScore.save();
 
-  res.status(200).json(score);
+    res.status(200).json(existingScore);
+  } else {
+    // If no existing score is found, create a new score entry
+    const score = new Score({
+      playerID,
+      roomID,
+      point
+    });
+
+    await score.save();
+
+    res.status(200).json(score);
+  }
 };
+
 
 const updateScore = async (req, res, next) => {
   try {
@@ -58,7 +70,7 @@ const deleteScore = async (req, res, next) => {
     next(err);
   }
 };
-exports.createScore = createScore;
+exports.giveScore = giveScore;
 exports.updateScore = updateScore;
 exports.deleteScore = deleteScore;
 exports.getAllScores = getAllScores;

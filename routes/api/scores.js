@@ -10,7 +10,7 @@ const scoreController = require('../../controllers/scores');
 // @route           POST api/scores
 // @description     Create Score
 // @access          Private
-router.post('/', auth, scoreController.createScore);
+router.post('/', auth, scoreController.giveScore);
 
 // @route           PUT api/scores/:id
 // @description     Update Score

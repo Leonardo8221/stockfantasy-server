@@ -58,7 +58,6 @@ io.on('connection', (socket) => {
   });
   
   socket.on('gameReadyRequest', (Game) => {
-    console.log('gameReady');
     gameController.createGameBySocket(io, Game);
   });
   
