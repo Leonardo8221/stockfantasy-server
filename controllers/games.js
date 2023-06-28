@@ -1,6 +1,4 @@
-const fmp = require('financialmodelingprep')(
-  'f10a1d8a11d2cc5b706ea21564646b12'
-);
+const https = require('https');
 
 const Game = require('../models/Game');
 const User = require('../models/User');
@@ -56,7 +54,7 @@ const createGame = async (req, res, next) => {
   return res.status(200).json(game);
 };
 const createGameBySocket = async (io, G) => {
-  const { roomID, selectedStocks, playerID} = G;
+  const { roomID, selectedStocks, playerID } = G;
 
   let game = new Game({
     playerID,
@@ -94,10 +92,25 @@ const deleteGame = async (req, res, next) => {
 };
 
 const getAllStocks = async (req, res, next) => {
-  // API route: /quote/AAPL
-  fmp.market.index
-    .list()
-    .then((response) => res.json(response));
+  const options = {
+    hostname: 'financialmodelingprep.com',
+    port: 443,
+    path: 'https://financialmodelingprep.com/api/v3/stock/list?apikey=16eec80c5f5ee710a5a15f0e381f88a6',
+    method: 'GET'
+  }
+
+  const request = https.request(options, (response) => {
+    response.on('data', (data) => {
+      res.status(201).send(data)
+    })
+  })
+
+  request.on('error', (error) => {
+    console.error(error)
+    res.status(500).send('Internal Server Error')
+  })
+
+  request.end()
 };
 
 exports.createGame = createGame;
