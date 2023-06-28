@@ -17,10 +17,6 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String
   },
-  budget: {
-    type: Number,
-    default: 1000
-  },
   createdDate: {
     type: Date,
     default: Date.now

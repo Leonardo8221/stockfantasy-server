@@ -13,7 +13,7 @@ const gameController = require('./controllers/games');
 const server = http.Server(app);
 const io = socket(server, {
   cors: {
-    origin: `http://localhost:${process.env.CLIENT_PORT || 3000}`,
+    origin: `http://localhost:${process.env.CLIENT_PORT || 8080}`,
     methods: ['GET', 'POST'],
     credentials: true
   }
