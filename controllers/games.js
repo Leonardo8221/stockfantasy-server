@@ -97,20 +97,26 @@ const getAllStocks = async (req, res, next) => {
     port: 443,
     path: 'https://financialmodelingprep.com/api/v3/stock/list?apikey=16eec80c5f5ee710a5a15f0e381f88a6',
     method: 'GET'
-  }
+  };
 
   const request = https.request(options, (response) => {
+    let responseData = '';
+  
     response.on('data', (data) => {
-      res.status(201).send(data)
-    })
-  })
+      responseData += data;
+    });
+  
+    response.on('end', () => {
+      res.status(201).send(responseData);
+    });
+  });
 
   request.on('error', (error) => {
-    console.error(error)
-    res.status(500).send('Internal Server Error')
-  })
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  });
 
-  request.end()
+  request.end();
 };
 
 exports.createGame = createGame;
