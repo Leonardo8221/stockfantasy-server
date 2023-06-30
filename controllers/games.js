@@ -1,8 +1,9 @@
 const https = require('https');
-
+const axios = require('axios');
 const Game = require('../models/Game');
 const User = require('../models/User');
 const Room = require('../models/Room');
+const { default: fetch } = require('node-fetch');
 
 const getAllGames = async (req, res, next) => {
   try {
@@ -92,31 +93,27 @@ const deleteGame = async (req, res, next) => {
 };
 
 const getAllStocks = async (req, res, next) => {
-  const options = {
-    hostname: 'financialmodelingprep.com',
-    port: 443,
-    path: 'https://financialmodelingprep.com/api/v3/stock/list?apikey=16eec80c5f5ee710a5a15f0e381f88a6',
-    method: 'GET'
-  };
+  let spSymbolList = [];
+  axios
+    .get(
+      `https://financialmodelingprep.com/api/v3/sp500_constituent?apikey=${process.env.STOCKS_API_KEY}`
+    )
+    .then((spSymbols) => {
+      spSymbols.data.map((spSymbol) => {
+        spSymbolList.push(spSymbol.symbol);
+      });
+      axios
+        .get(
+          `https://financialmodelingprep.com/api/v3/quote-short/${spSymbolList.join(
+            ','
+          )}?apikey=${process.env.STOCKS_API_KEY}`
+        )
+        .then((response) => res.status(200).send(response.data))
+        .catch((err) => console.log(err));
 
-  const request = https.request(options, (response) => {
-    let responseData = '';
-  
-    response.on('data', (data) => {
-      responseData += data;
-    });
-  
-    response.on('end', () => {
-      res.status(201).send(responseData);
-    });
-  });
-
-  request.on('error', (error) => {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  });
-
-  request.end();
+      
+    })
+    .catch((err) => console.error(err));
 };
 
 exports.createGame = createGame;
