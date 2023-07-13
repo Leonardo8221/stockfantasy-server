@@ -1,15 +1,17 @@
 require('dotenv').config();
+process.env.SUPPRESS_NO_CONFIG_WARNING = true;
 
 const cors = require('cors');
 const express = require('express');
-const connectDB = require('./config/db');
 const path = require('path');
 const http = require('http');
 const socket = require('socket.io');
 const app = express();
+const mongoose = require('mongoose');
 
 const roomController = require('./controllers/rooms');
 const gameController = require('./controllers/games');
+
 const server = http.Server(app);
 const io = socket(server, {
   cors: {
@@ -20,7 +22,18 @@ const io = socket(server, {
 });
 
 // Connect Database
-connectDB();
+try {
+  mongoose.connect(process.env.DB_URL, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+  });
+
+  console.log('MongoDB Connected...');
+} catch (err) {
+  console.error(err.message);
+}
 
 // Init Middleware
 app.use(cors());
@@ -56,11 +69,10 @@ io.on('connection', (socket) => {
   socket.on('exitGameRequest', (Room) => {
     roomController.exitGameBySocket(io, Room);
   });
-  
+
   socket.on('gameReadyRequest', (Game) => {
     gameController.createGameBySocket(io, Game);
   });
-  
 
   socket.on('disconnect', () => {
     console.log(`Socket ${socket.id} disconnected`);

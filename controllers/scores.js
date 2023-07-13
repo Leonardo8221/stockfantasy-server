@@ -46,32 +46,23 @@ const giveScore = async (req, res, next) => {
   }
 };
 
-
-const updateScore = async (req, res, next) => {
+const updateScore = async (io, formData) => {
+  const { roomID, players } = formData;
   try {
-    const room = await Score.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    });
-    if (!room) {
+    const scores = await Score.find({ roomID: roomID });
+    
+    if (!scores.length) {
       return res.status(404).json('error');
     }
-    res.status(200).json(room);
+
+    await scores.save();
+    io.emit('givedScoreToUser', socres);
   } catch (error) {
     res.status(400).json({ error });
   }
 };
 
-const deleteScore = async (req, res, next) => {
-  try {
-    const room = await Score.findByIdAndDelete(req.params.id);
-    res.status(200).json(room);
-  } catch (err) {
-    next(err);
-  }
-};
 exports.giveScore = giveScore;
 exports.updateScore = updateScore;
-exports.deleteScore = deleteScore;
 exports.getAllScores = getAllScores;
 exports.getScores = getScores;
